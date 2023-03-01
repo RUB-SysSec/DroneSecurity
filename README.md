@@ -185,7 +185,7 @@ So in total we decoded 18 packets, 14 with correct CRC. Again, this is *expected
 # FAQ - Frequently Asked Questions
 
 Is DJI's Drone-ID the same as the standardized, Bluetooth or WiFi-based "Remote ID"?
-> No. DJI uses a dedicated wireless protocol for its Drone-ID, hence the need to implement an receiver. Check 
+> No. DJI uses a dedicated wireless protocol for its Drone-ID, hence the need to implement an receiver. Check [www.opendroneid.org](https://www.opendroneid.org) for an in-depth description of the EU/US-wide standard.
 
 Can I use *this software* to locate drones from other manufacturers?
 > No. This software decodes DJI-specific protocols. It does not work with WiFi or Bluetooth-based "Remote ID".
