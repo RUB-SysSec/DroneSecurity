@@ -18,7 +18,7 @@ Our software is a proof-of-concept receiver that we used to reverse-engineer an 
 
 ## Sample File
 
-We provide a sample file here: `samples/outdoor_mini2_250422_50e6`
+We provide a sample file here: `samples/mini2_sm`
 
 The samples were directly dumped from the first stage of the live receiver that
 *detects* candidate frames and performs no other data processing; it usually hands
@@ -28,7 +28,7 @@ You can use `inspectrum` to visualize the raw sample file:
 
 ```
 sudo apt install inspectrum
-inspectrum -r 50e6 samples/outdoor_mini2_250422_50e6
+inspectrum -r 50e6 samples/mini2_sm
 ```
 
 <img alt="Inspectrum screenshot of Drone-ID bursts" width=500 src="./img/inspectrum.png"></a></p>
@@ -45,7 +45,7 @@ pip3 install -r requirements.txt
 
 You can now run the decoder on the sample file:
 ```
-./src/droneid_receiver_offline.py -i samples/outdoor_mini2_250422_50e6
+./src/droneid_receiver_offline.py -i samples/mini2_sm
 ```
 
 ### Results
@@ -126,7 +126,7 @@ The receiver will hop through a list of frequencies and, if a drone is detected,
 
 > If you're looking for a deeper dive into the processing steps, we suggest calling the offline decoder with `--debug`. This will **enable a GUI** with step-by-step decoding.
 > ```
-> ./src/droneid_receiver_offline.py -i samples/outdoor_mini2_250422_50e6
+> ./src/droneid_receiver_offline.py -i samples/mini2_sm
 > ```
 
 
