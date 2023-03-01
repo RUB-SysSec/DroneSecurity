@@ -16,9 +16,9 @@ Our software is a proof-of-concept receiver that we used to reverse-engineer an 
 
 <p><img alt="Decoded Payload" width=500 src="./img/result.png"></a></p>
 
-## Sample File
+## Sample Files
 
-We provide a sample file here: `samples/mini2_sm`
+We provide sample files in the `samples/` folder.
 
 The samples were directly dumped from the first stage of the live receiver that
 *detects* candidate frames and performs no other data processing; it usually hands
@@ -82,8 +82,10 @@ The script performs detection and decoding just as the live receiver would. It p
 }
 ```
 
-The summary contains decoding stats and flight path. In this example, the drone did not have GPS coordinates locked yet, and only the smartphone's location is transmitted:
+The summary contains decoding stats and flight path. In the `mini2_sm` sample, the drone did not have GPS coordinates locked yet, and only the smartphone's location is transmitted:
 ```
+$ ./src/droneid_receiver_offline.py -i samples/mini2_sm
+… … …
 Frame detection: 10 candidates
 Decoder: 9 total, CRC OK: 7 (2 CRC errors)
 Drone Coordinates:
@@ -92,6 +94,17 @@ App Coordinates:
 (51.447176178716916, 7.266528392911369)
 …
 (51.447176178716916, 7.266528392911369)
+```
+
+For `samples/mavic_air_2` both locations are transmitted:
+```
+$ ./src/droneid_receiver_offline.py -i samples/mavic_air_2
+…
+Decoder: 1 total, CRC OK: 1 (0 CRC errors)
+Drone Coordinates:
+(51.44633393111904, 7.26721594197086, 12.8)
+App Coordinates:
+(51.44620788045814, 7.267101350460944)
 ```
 
 # Live Receiver
@@ -172,7 +185,7 @@ So in total we decoded 18 packets, 14 with correct CRC. Again, this is *expected
 # FAQ - Frequently Asked Questions
 
 Is DJI's Drone-ID the same as the standardized, Bluetooth or WiFi-based "Remote ID"?
-> No. DJI uses a dedicated wireless protocol for its Drone-ID, hence the need to implement an receiver.
+> No. DJI uses a dedicated wireless protocol for its Drone-ID, hence the need to implement an receiver. Check 
 
 Can I use *this software* to locate drones from other manufacturers?
 > No. This software decodes DJI-specific protocols. It does not work with WiFi or Bluetooth-based "Remote ID".
