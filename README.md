@@ -140,16 +140,16 @@ Packet #2, start 0.001546, end 0.002191, length 0.000644, cfo 0.000000
 
 Some of these packets are false-positives and we do not expect successful decoding. Start and end are in seconds, so you can use inspectrum to take a look at individual frames.
 
-Next, the Packet class detects the Zadoff-Chu sequences and performs time and frequency offset corrections. It splits the frames into individual OFDM symbols.
+Next, the `Packet` class detects the Zadoff-Chu sequences and performs time and frequency offset corrections. It splits the frames into individual OFDM symbols.
 ```
 FFO: -6546.528614
 Found ZC sequences: 600 147
 ZC Offset: -2.867868
 ```
 
-The Decoder class gets the OFDM symbols and demodulates the subcarriers using QPSK. We do not know the QPSK orientation here, hence, we simply brute-force the orientation. `decoder.magic()` performs the descrambling and turbo-decode.
+The `Decoder` class gets the OFDM symbols and demodulates the subcarriers using QPSK. We do not know the QPSK orientation here, hence, we simply brute-force the orientation. `decoder.magic()` performs the descrambling and turbo-decode.
 
-DroneIDPacket unpacks the resulting bitstream into the Drone-ID struct. At this point the message could be decoded, but might be corrupted (CRC check needed).
+`DroneIDPacket` unpacks the resulting bitstream into the Drone-ID struct. At this point the message could be decoded, but might be corrupted (CRC check needed).
 
 CRC check FAIL is easy to spot by looking at the Serial Number (should read 'SecureStorage?'):
 ```
