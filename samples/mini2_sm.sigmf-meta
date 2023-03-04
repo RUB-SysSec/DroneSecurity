@@ -1,0 +1,106 @@
+{
+  "annotations": [
+    {
+      "core:freq_lower_edge": 2410000000,
+      "core:freq_upper_edge": 2419000000,
+      "core:label": "DroneID",
+      "core:description": "DroneID",
+      "core:sample_count": 32180,
+      "core:sample_start": 8030,
+      "core:generator": "OmniSIG Studio"
+    },
+    {
+      "core:freq_lower_edge": 2410000000,
+      "core:freq_upper_edge": 2419000000,
+      "core:label": "DroneID",
+      "core:description": "DroneID",
+      "core:sample_count": 32180,
+      "core:sample_start": 56710,
+      "core:generator": "OmniSIG Studio"
+    },
+    {
+      "core:freq_lower_edge": 2410000000,
+      "core:freq_upper_edge": 2419000000,
+      "core:label": "DroneID",
+      "core:description": "DroneID",
+      "core:sample_count": 32180,
+      "core:sample_start": 105340,
+      "core:generator": "OmniSIG Studio"
+    },
+    {
+      "core:freq_lower_edge": 2410000000,
+      "core:freq_upper_edge": 2419000000,
+      "core:label": "DroneID",
+      "core:description": "DroneID",
+      "core:sample_count": 32180,
+      "core:sample_start": 250850,
+      "core:generator": "OmniSIG Studio"
+    },
+    {
+      "core:freq_lower_edge": 2410000000,
+      "core:freq_upper_edge": 2419000000,
+      "core:label": "DroneID",
+      "core:description": "DroneID",
+      "core:sample_count": 32180,
+      "core:sample_start": 444520,
+      "core:generator": "OmniSIG Studio"
+    },
+    {
+      "core:freq_lower_edge": 2410000000,
+      "core:freq_upper_edge": 2419000000,
+      "core:label": "DroneID",
+      "core:description": "DroneID",
+      "core:sample_count": 32180,
+      "core:sample_start": 493250,
+      "core:generator": "OmniSIG Studio"
+    },
+    {
+      "core:freq_lower_edge": 2410000000,
+      "core:freq_upper_edge": 2419000000,
+      "core:label": "DroneID",
+      "core:description": "DroneID",
+      "core:sample_count": 32180,
+      "core:sample_start": 541780,
+      "core:generator": "OmniSIG Studio"
+    },
+    {
+      "core:freq_lower_edge": 2410000000,
+      "core:freq_upper_edge": 2419000000,
+      "core:label": "DroneID",
+      "core:description": "DroneID",
+      "core:sample_count": 32180,
+      "core:sample_start": 590080,
+      "core:generator": "OmniSIG Studio"
+    },
+    {
+      "core:freq_lower_edge": 2410000000,
+      "core:freq_upper_edge": 2419000000,
+      "core:label": "DroneID",
+      "core:description": "DroneID",
+      "core:sample_count": 32180,
+      "core:sample_start": 638530,
+      "core:generator": "OmniSIG Studio"
+    },
+    {
+      "core:freq_lower_edge": 2410000000,
+      "core:freq_upper_edge": 2419000000,
+      "core:label": "DroneID",
+      "core:description": "DroneID",
+      "core:sample_count": 32180,
+      "core:sample_start": 687290,
+      "core:generator": "OmniSIG Studio"
+    }
+  ],
+  "captures": [
+    {
+      "core:sample_start": 0,
+      "core:frequency": 2404885000.0
+    }
+  ],
+  "global": {
+    "core:version": "1.1.0",
+    "core:datatype": "cf32_le",
+    "core:description": "10 complete DroneID Bursts from a DJI Mini 2",
+    "core:sample_rate": 50000000
+  }
+}

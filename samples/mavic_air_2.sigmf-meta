@@ -1,0 +1,52 @@
+{
+  "annotations": [
+    {
+      "core:freq_lower_edge": 2455000000,
+      "core:freq_upper_edge": 2464000000,
+      "core:label": "DroneID",
+      "core:description": "DroneID",
+      "core:sample_count": 32180,
+      "core:sample_start": 93010,
+      "core:generator": "OmniSIG Studio"
+    },
+    {
+      "core:freq_lower_edge": 2455000000,
+      "core:freq_upper_edge": 2464000000,
+      "core:label": "DroneID",
+      "core:description": "DroneID",
+      "core:sample_count": 32180,
+      "core:sample_start": 128639,
+      "core:generator": "OmniSIG Studio"
+    },
+    {
+      "core:freq_lower_edge": 2440530000,
+      "core:freq_upper_edge": 2449530000,
+      "core:label": "DroneID",
+      "core:description": "DroneID",
+      "core:sample_count": 32180,
+      "core:sample_start": 165465,
+      "core:generator": "OmniSIG Studio"
+    },
+    {
+      "core:freq_lower_edge": 2440530000,
+      "core:freq_upper_edge": 2449530000,
+      "core:label": "DroneID",
+      "core:description": "DroneID",
+      "core:sample_count": 24190,
+      "core:sample_start": 201090,
+      "core:generator": "OmniSIG Studio"
+    }
+  ],
+  "captures": [
+    {
+      "core:sample_start": 0,
+      "core:frequency": 2457500000.0
+    }
+  ],
+  "global": {
+    "core:version": "1.1.0",
+    "core:datatype": "cf32_le",
+    "core:description": "3 complete and one partial DroneID Bursts from a DJI Mavic Air 2",
+    "core:sample_rate": 50000000
+  }
+}
