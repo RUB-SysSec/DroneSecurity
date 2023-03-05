@@ -28,7 +28,7 @@ You can use `inspectrum` to visualize the raw sample file:
 
 ```
 sudo apt install inspectrum
-inspectrum -r 50e6 samples/mini2_sm
+inspectrum samples/mini2_sm.sigmf-data
 ```
 
 <img alt="Inspectrum screenshot of Drone-ID bursts" width=500 src="./img/inspectrum.png"></a></p>
@@ -45,7 +45,7 @@ pip3 install -r requirements.txt
 
 You can now run the decoder on the sample file:
 ```
-./src/droneid_receiver_offline.py -i samples/mini2_sm
+./src/droneid_receiver_offline.py -i samples/mini2_sm.sigmf-data
 ```
 
 ### Results
@@ -82,9 +82,9 @@ The script performs detection and decoding just as the live receiver would. It p
 }
 ```
 
-The summary contains decoding stats and flight path. In the `mini2_sm` sample, the drone did not have GPS coordinates locked yet, and only the smartphone's location is transmitted:
+The summary contains decoding stats and flight path. In the `mini2_sm.sigmf-data` sample, the drone did not have GPS coordinates locked yet, and only the smartphone's location is transmitted:
 ```
-$ ./src/droneid_receiver_offline.py -i samples/mini2_sm
+$ ./src/droneid_receiver_offline.py -i samples/mini2_sm.sigmf-data
 … … …
 Frame detection: 10 candidates
 Decoder: 9 total, CRC OK: 7 (2 CRC errors)
@@ -96,9 +96,9 @@ App Coordinates:
 (51.447176178716916, 7.266528392911369)
 ```
 
-For `samples/mavic_air_2` both locations are transmitted:
+For `samples/mavic_air_2.sigmf-data` both locations are transmitted:
 ```
-$ ./src/droneid_receiver_offline.py -i samples/mavic_air_2
+$ ./src/droneid_receiver_offline.py -i samples/mavic_air_2.sigmf-data
 …
 Decoder: 1 total, CRC OK: 1 (0 CRC errors)
 Drone Coordinates:
@@ -139,7 +139,7 @@ The receiver will hop through a list of frequencies and, if a drone is detected,
 
 > If you're looking for a deeper dive into the processing steps, we suggest calling the offline decoder with `--debug`. This will **enable a GUI** with step-by-step decoding.
 > ```
-> ./src/droneid_receiver_offline.py -i samples/mini2_sm
+> ./src/droneid_receiver_offline.py -i samples/mini2_sm.sigmf-data
 > ```
 
 
