@@ -138,8 +138,9 @@ The receiver will hop through a list of frequencies and, if a drone is detected,
 <p><img alt="Processing Pipeline" align="right" width=500 src="./img/pipeline.png"></a></p>
 
 > If you're looking for a deeper dive into the processing steps, we suggest calling the offline decoder with `--debug`. This will **enable a GUI** with step-by-step decoding.
+
 > ```
-> ./src/droneid_receiver_offline.py -i samples/mini2_sm
+> ./src/droneid_receiver_offline.py -i samples/mini2_sm --debug
 > ```
 
 
@@ -185,13 +186,23 @@ So in total we decoded 18 packets, 14 with correct CRC. Again, this is *expected
 # FAQ - Frequently Asked Questions
 
 Is DJI's Drone-ID the same as the standardized, Bluetooth or WiFi-based "Remote ID"?
-> No. DJI uses a dedicated wireless protocol for its Drone-ID, hence the need to implement an receiver. Check [www.opendroneid.org](https://www.opendroneid.org) for an in-depth description of the EU/US-wide standard.
+> No. DJI uses a dedicated wireless protocol for its Drone-ID, hence the need to implement an receiver.
 
 Can I use *this software* to locate drones from other manufacturers?
 > No. This software decodes DJI-specific protocols. It does not work with WiFi or Bluetooth-based "Remote ID".
 
 Can I locate drones without this software?
-> Maybe. Since mid-2022, the US or EU started requiring drone manufacturers to implement "Drone Remote ID" - an international standard that works on top of WiFi or Bluetooth. You can use a smartphone app to locate drones that support the standard.
+> Maybe. Since late 2022, the US or EU started requiring drone manufacturers to implement "Drone Remote ID" - an international standard that works on top of WiFi or Bluetooth. You can use a smartphone app to locate drones that support the standard. New drones already feature WiFi/Bluetooth-based "Remote ID", and existing drones are gradually retrofitted (e.g., through firmware updates).
+
+Where can I find more information on the WiFi/Bluetooth-based Remote ID?
+> Standard documents in EU: EN 4709, US: ASTM F3411.
+> For practical information, check out [this page](https://www.faa.gov/uas/getting_started/remote_id/drone_pilots) by the FAA. If you're looking for an open-source implementation (e.g., Android apps), we suggest [opendroneid.org](https://www.opendroneid.org) and their [Github repositories](https://github.com/opendroneid).
+
+Are you going to improve the receiver, introduce new features, or port to another SDR?
+> We're not planning to include new features at this point. The tool is provided as artifact along our academic paper and enables researchers to reproduce our results, and to help study the privacy implications. It is not meant for productive, reliable localization of drones.
+
+Is your receiver the only receiver available?
+> No. The code in [proto17/dji_droneid](https://github.com/proto17/dji_droneid) was developed in parallel. We think it's great and if you're interested in details, you should take a look at both implementations.
 
 # Citing the Paper
 
