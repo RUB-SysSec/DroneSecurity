@@ -1,13 +1,23 @@
-bitarray==2.4.1
-crcmod==1.7
-cycler==0.11.0
-fonttools==4.38.0
-kiwisolver==1.4.4
-matplotlib==3.5.1
-numpy==1.22.3
-packaging==23.0
-Pillow==9.4.0
-pyparsing==3.0.9
-python-dateutil==2.8.2
-scipy==1.8.0
-six==1.16.0
+# Core dependencies
+numpy>=1.22.0
+scipy>=1.8.0
+matplotlib>=3.5.0
+bitarray>=2.4.0
+crcmod>=1.7
+
+# Additional core dependencies
+cycler>=0.11.0
+fonttools>=4.38.0
+kiwisolver>=1.4.4
+packaging>=23.0
+Pillow>=9.4.0
+pyparsing>=3.0.9
+python-dateutil>=2.8.2
+six>=1.16.0
+
+# BladeRF SDR support (Windows-compatible)
+bladerf
+
+# Testing dependencies
+hypothesis>=6.0.0
+pytest>=7.0.0

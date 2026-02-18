@@ -43,7 +43,7 @@ def rm_turbo_rx(bits_in):
     return bits_out[n_dummy:]
 
 # Poor man's QPSK mapping quadrants to symbols
-def get_symbol_bits(symbol: np.complex, phase_correction: int=0) -> int:
+def get_symbol_bits(symbol: complex, phase_correction: int=0) -> int:
     if phase_correction < 0 or phase_correction >= len(qpsk_to_bits):
         raise ValueError("Invalid phase correction")
 
@@ -87,7 +87,7 @@ class Decoder:
             raw_data.append([])
             for qval_ in qbits:
                 qval_ = qval_.split(" ")
-                qval = np.complex(float(qval_[0]), float(qval_[1]))
+                qval = complex(float(qval_[0]), float(qval_[1]))
                 raw_data[i].append(qval)
 
         self.raw_data = raw_data

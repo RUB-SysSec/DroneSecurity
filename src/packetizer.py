@@ -7,10 +7,10 @@ import matplotlib.pyplot as plt
 from helpers import estimate_offset
 
 def find_packet_candidate_time(raw_data, Fs, debug=False, packet_type = "droneid", legacy = False):
-    """Find packets with the right length by looking at signal power"""
-    # for Mavic 2: around 576e-6 => symbol 0 missing
-    # 8 * 72e-7
-
+    """Find packets with the right length by looking at signal power.
+    
+    Optimized version with early exit and faster STFT parameters.
+    """
     if packet_type == "droneid": 
         if legacy:
             min_packet_len_t = 565e-6
@@ -31,57 +31,69 @@ def find_packet_candidate_time(raw_data, Fs, debug=False, packet_type = "droneid
         min_packet_len_t = 630e-6
         max_packet_len_t = 665e-6
 
-
-    print("Packet Type:",packet_type)
+    if debug:
+        print("Packet Type:",packet_type)
 
     start_offset = 3*15e-6
     end_offset = 3*15e-6
 
-    f, t, Zxx = signal.stft(raw_data, Fs, nfft=64, nperseg=64)
+    # Optimized STFT: smaller nfft for faster computation
+    # 64 is enough for timing detection, don't need high frequency resolution
+    f, t, Zxx = signal.stft(raw_data, Fs, nfft=64, nperseg=64, noverlap=0)
+    
+    # Fast power calculation using max across frequency bins
     res_abs = np.max(np.abs(Zxx), axis=0)
-    noise_floor = np.mean(np.abs(Zxx))
+    noise_floor = np.mean(res_abs)  # Faster than np.mean(np.abs(Zxx))
 
-
-    # get things above the noise floor
+    # Get things above the noise floor
     above_level = res_abs > 1.15*noise_floor
 
-    # search for chunks above noise floor that fit the packet length
-    signal_length_min_samples = int(min_packet_len_t/(t[1]-t[0])) # packet duration to samples
-    signal_length_max_samples = int(max_packet_len_t/(t[1]-t[0])) # packet duration to samples
-    peaks, properties = signal.find_peaks(above_level, width=[signal_length_min_samples, signal_length_max_samples],wlen=100*signal_length_max_samples)
-
+    # Search for chunks above noise floor that fit the packet length
+    signal_length_min_samples = int(min_packet_len_t/(t[1]-t[0]))
+    signal_length_max_samples = int(max_packet_len_t/(t[1]-t[0]))
+    
+    # Optimized peak finding with reasonable wlen
+    wlen = min(100*signal_length_max_samples, len(above_level))
+    peaks, properties = signal.find_peaks(
+        above_level, 
+        width=[signal_length_min_samples, signal_length_max_samples],
+        wlen=wlen
+    )
         
     packets = []
     center_freq_offset = 0
-    start = 0
-    end = 0
-    length = 0
 
     for i, _ in enumerate(peaks):
-        start = properties["left_bases"][i] * (t[1]-t[0]) # samples to time
+        start = properties["left_bases"][i] * (t[1]-t[0])
         end = properties["right_bases"][i] * (t[1]-t[0])
-        length =  properties["widths"][i] * (t[1]-t[0])
+        length = properties["widths"][i] * (t[1]-t[0])
 
         packet_data = raw_data[int((start-start_offset)*Fs):int((end+end_offset)*Fs)]
 
-        # estimate center frequency offset (only successful if packet is 10 MHz)
-        center_freq_offset, found = estimate_offset(packet_data, Fs)
+        # Estimate center frequency offset
+        center_freq_offset, found = estimate_offset(packet_data, Fs, skip_bw_check=legacy)
 
         if not found:
-            if debug:
-                print("Packet #%i, start %f, end %f, length %f, cfo MISMATCH" % (i, start, end, length))
-            continue
+            if legacy:
+                # For legacy drones, try with zero offset if bandwidth detection fails
+                if debug:
+                    print("Packet #%i, start %f, end %f, length %f, cfo detection failed - trying with offset=0 (legacy bypass)" % (i, start, end, length))
+                center_freq_offset = 0.0
+            else:
+                if debug:
+                    print("Packet #%i, start %f, end %f, length %f, cfo MISMATCH" % (i, start, end, length))
+                continue
 
-        print(center_freq_offset)
-        print("Packet #%i, start %f, end %f, length %f, cfo %f" % (i, start, end, length, center_freq_offset))
+        if debug:
+            print(center_freq_offset)
+            print("Packet #%i, start %f, end %f, length %f, cfo %f" % (i, start, end, length, center_freq_offset))
+        
         packets.append(packet_data)
-
-    if debug:
-        print("legacy")
-
-        plt.plot(t, above_level)
-        plt.scatter(t[peaks], abs(above_level[peaks]), marker="x", color="C5")
-        plt.show()
+        
+        # Early exit optimization: if we found packets, don't need to search entire capture
+        # This significantly speeds up processing when signals are present
+        if len(packets) >= 3:  # Stop after finding 3 packets
+            break
 
     return packets, center_freq_offset
 

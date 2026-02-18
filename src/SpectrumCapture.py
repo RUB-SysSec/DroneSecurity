@@ -60,7 +60,7 @@ class SpectrumCapture:
         if success:
             packet_data = fshift(packet_data, -1.0*offset, self.sampling_rate)
         else:
-            return ValueError("Cannot estimate carrier offset for packet %i" % (pktnum))
+            raise ValueError("Cannot estimate carrier offset for packet %i" % (pktnum))
 
         if self.packet_type == "droneid" or self.packet_type == "beacon":
             resample_rate = 15.36e6

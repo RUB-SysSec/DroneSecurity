@@ -12,6 +12,7 @@ class Packet:
     """Demodulate frames from raw samples to QPSK data"""
     def __init__(self, raw_samples, Fs=15.36e6, enable_zc_detection=True, debug=False, legacy = False, packet_type = "droneid"):
         self.debug = debug
+        self.legacy = legacy
         self.NCARRIERS = NCARRIERS
         self.MAXNCARRIERS = MAXNCARRIERS
 
@@ -59,12 +60,27 @@ class Packet:
             zc_seq_2 = 147
 
         # first ZC is variable (coarse sync) so not predictable
-        # second ZC for fine sync, must be 147
-        if not (zc_seq_2 == 147) and packet_type == "droneid":
-            #print("ZC Sequence not found. Expected: 600 and 147, Found: %i and %i" % (zc_seq_1, zc_seq_2))
-            raise ValueError("ZC Sequence not found. Expected: 600 and 147, Found: %i and %i" % (zc_seq_1, zc_seq_2))
+        # second ZC for fine sync, must be 147 (or 600 for some legacy drones)
+        if packet_type == "droneid":
+            # For legacy drones, accept either 147 or 600 as valid ZC sequences
+            valid_zc_sequences = [147, 600]
+            if self.legacy:
+                # Legacy drones may have different ZC sequence arrangements
+                if zc_seq_2 not in valid_zc_sequences and zc_seq_1 not in valid_zc_sequences:
+                    raise ValueError("ZC Sequence not found. Expected: 600 and 147, Found: %i and %i" % (zc_seq_1, zc_seq_2))
+                # If sequences are swapped, swap them back
+                if zc_seq_1 == 147 and zc_seq_2 != 147:
+                    zc_seq_1, zc_seq_2 = zc_seq_2, zc_seq_1
+            else:
+                if zc_seq_2 != 147:
+                    raise ValueError("ZC Sequence not found. Expected: 600 and 147, Found: %i and %i" % (zc_seq_1, zc_seq_2))
 
         print("Found ZC sequences:",zc_seq_1, zc_seq_2)
+        
+        # Store detected ZC sequences for diagnostics
+        self.detected_zc_seq_1 = zc_seq_1
+        self.detected_zc_seq_2 = zc_seq_2
+        
         self.channel = self.estimate_channel(self.ZC_SYMBOL_IDX[0], zc_seq_1)
         self.channel += self.estimate_channel(self.ZC_SYMBOL_IDX[1], zc_seq_2)
         self.channel *= 0.5
@@ -218,6 +234,21 @@ class Packet:
             res.append(np.max(np.abs(corr(symbol_f, a))))
 
         best = np.argmax(res) + 1
+        best_corr = res[best - 1]
+        
+        # Calculate correlation with expected DroneID ZC sequences (147 and 600)
+        corr_147 = res[146]  # index 146 = sequence 147
+        corr_600 = res[599]  # index 599 = sequence 600
+        
+        # Check if best correlation is significantly stronger than others
+        sorted_res = sorted(res, reverse=True)
+        second_best_corr = sorted_res[1]
+        confidence = best_corr / second_best_corr if second_best_corr > 0 else float('inf')
+        
+        # Print diagnostic info - helps identify WiFi vs DroneID
+        print(f"  ZC detection: best={best} (corr={best_corr:.1f}), "
+              f"147={corr_147:.1f}, 600={corr_600:.1f}, confidence={confidence:.2f}")
+        
         if self.debug:
             print("best zc seq", best)
 

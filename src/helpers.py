@@ -92,7 +92,19 @@ def itfft(c):
 
     return np.fft.ifft(c_full)
 
-def estimate_offset(y, Fs, debug=False, packet_type="droneid"):
+def estimate_offset(y, Fs, debug=False, packet_type="droneid", skip_bw_check=False):
+    """Estimate carrier frequency offset from signal.
+    
+    Args:
+        y: Input samples
+        Fs: Sample rate
+        debug: Enable debug output
+        packet_type: Type of packet to detect
+        skip_bw_check: If True, skip bandwidth validation (useful for legacy drones in noisy environments)
+    
+    Returns:
+        Tuple of (offset, found) where offset is the frequency offset and found indicates success
+    """
     nfft_welch = 2048
 
     if len(y) < nfft_welch:
@@ -136,11 +148,23 @@ def estimate_offset(y, Fs, debug=False, packet_type="droneid"):
             print("candidate band fstart: %3.2f, fend: %3.2f, bw: %3.2f MHz" % (fstart, fend, bw/1e6))
         print("candidate band fstart: %3.2f, fend: %3.2f, bw: %3.2f MHz" % (fstart, fend, bw/1e6))
 
-        # droneid / beacons | c2 | video feed
-        if packet_type == "droneid" and (bw > 8e6 and bw < 11e6):
-            offset = fstart - 0.5*bw
-            band_found = True
-            break
+        # DroneID bandwidth filtering:
+        # - DroneID is ~9-10 MHz wide (LTE 10MHz channel)
+        # - WiFi is 20 MHz wide - REJECT signals wider than 12 MHz
+        # - Narrowband interference is < 5 MHz - REJECT signals narrower than 7 MHz
+        if packet_type == "droneid":
+            # Strict bandwidth check: 8-12 MHz for DroneID
+            if bw > 8e6 and bw < 12e6:
+                offset = fstart - 0.5*bw
+                band_found = True
+                break
+            elif skip_bw_check and (bw > 5e6 and bw < 15e6):
+                # Legacy mode with relaxed check - still reject obvious WiFi (>15MHz)
+                offset = fstart - 0.5*bw
+                band_found = True
+                if debug:
+                    print(f"Legacy bypass: accepting bw={bw/1e6:.2f} MHz")
+                break
         elif packet_type == "c2" and (bw > 1.2e6 and bw < 1.95e6):
             offset = fstart - 0.5*bw
             band_found = True
