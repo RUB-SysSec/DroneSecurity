@@ -2,11 +2,22 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,macos,venv
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudiocode,macos,venv
 
-#ext_drone_id
-receive_test.raw
-.vscode
-samples/
+# DroneID Receiver Output Files
+receive_test*.raw
+ext_drone_id*.raw
+decoded_bits*.bin
 pkt_sym*
+
+# IDE and Editor Files
+.vscode/
+.kiro/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sample files (keep directory structure but ignore large files)
+# samples/ folder is kept for distribution
 
 ### macOS ###
 # General
