@@ -20,7 +20,7 @@ Our software is a proof-of-concept receiver that we used to reverse-engineer an 
 
 We provide sample files in the `samples/` folder.
 
-The samples were directly dumped from the first stage of the live receiver that
+The samples were directly dumped from the first stage of the live receiver, that
 *detects* candidate frames and performs no other data processing; it usually hands
 them directly to the rest of the code that you can test offline.
 
@@ -50,7 +50,7 @@ You can now run the decoder on the sample file:
 
 ### Results
 
-The script performs detection and decoding just as the live receiver would. It prints the decoded payload for each Drone-ID frame:
+The script performs detection and decoding, just as the live receiver would. It prints the decoded payload for each Drone-ID frame:
 
 ```json
 ## Drone-ID Payload ##
